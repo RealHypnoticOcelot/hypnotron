@@ -1,0 +1,5 @@
+git+https://github.com/Rapptz/discord.py
+re
+asyncio
+mysql-connector-python
+pillow
