@@ -173,9 +173,10 @@ def quotefunc(img, msg):
 async def quote(ctx: commands.Context, user: discord.Member):
     channel = ctx.channel
     msg = ""
+    prefix = await bot.get_prefix()
     async for i in channel.history(limit=50):
         if i.author == user:
-            if not i.content.lower().startswith("havitron") and not "quote" in i.content.lower():
+            if not i.content.lower().startswith(prefix) and not "quote" in i.content.lower():
                 msg = i.id
                 break
     img = user.display_avatar
