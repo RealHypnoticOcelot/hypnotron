@@ -32,6 +32,8 @@ from pathlib import Path
 import comics
 from comics.exceptions import InvalidEndpointError, InvalidDateError
 
+# Old code! It's no good, just here for parts
+
 newrules = """
 ## 1. Harassment
  - Harassment is not tolerated at all in this server. Joking around is fine of course, but if someone asks you to stop, you must do so
