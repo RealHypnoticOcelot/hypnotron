@@ -3,6 +3,8 @@ from discord import app_commands, FFmpegPCMAudio
 from discord.ext import commands, tasks
 import aiohttp
 from dotenv import dotenv_values
+import random
+import asyncio
 
 async def getmindfulness():
   async with aiohttp.ClientSession() as session:
@@ -31,20 +33,19 @@ class mindfulness(commands.Cog):
       mp3 = await getmindfulness()
       source = FFmpegPCMAudio(mp3['mp3'], executable="ffmpeg")
       self.voiceclient.play(source)
-      # typing lined up with mp3 file
-      previoustime = 0
-      typingtime = random.randint(5,20) / 10
       for entry in mp3['data']:
+        entry_index = mp3['data'].index(entry)
         if entry['type'] != "stop":
-          await asyncio.sleep((entry['time'] - previoustime) - typingtime - 0.5)
-          async with mindfulness_channel.typing():
-            await asyncio.sleep(typingtime)
-            if entry['type'] == "quote":
-              await self.channel.send(f"```\n{entry['text']}\n```")
-              previoustime = entry['time']
+          wait_time = int(mp3['data'][entry_index+1]['time'] - entry['time'])
+          if entry['type'] == "quote":
+            await self.mindfulness_channel.send(f"```\n{entry['text']}\n```")
+            await asyncio.sleep(wait_time)
+          else:
+            async with self.mindfulness_channel.typing(): # Type between speeches
+              await asyncio.sleep(wait_time)
         # wait to finish if not done
-        while self.voiceclient.is_playing():
-          await asyncio.sleep(1)
+      while self.voiceclient.is_playing():
+        await asyncio.sleep(1)
 
   @mindfulness.before_loop
   async def before_mindfulness(self):
@@ -56,10 +57,6 @@ class mindfulness(commands.Cog):
       dotenv_values()['MINDFULNESS_CHANNEL']
     )
     self.voiceclient = await self.mindfulness_channel.connect()
-
-  @mindfulness.after_loop
-  async def after_mindfulness(self):
-    await self.voiceclient.disconnect()
 
 async def setup(bot):
   await bot.add_cog(mindfulness(bot=bot))
