@@ -33,6 +33,7 @@ import comics
 from comics.exceptions import InvalidEndpointError, InvalidDateError
 
 # Old code! It's no good, just here for parts
+# Made with Python version 3.12.3
 
 newrules = """
 ## 1. Harassment

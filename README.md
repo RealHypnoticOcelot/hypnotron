@@ -11,6 +11,7 @@ Navigate to the directory the script was downloaded in, and run the following co
 ```python
 python3 -m venv env && source env/bin/activate
 ```
+Uses Python version 3.13.11!
 
 **Install Dependencies:**
 

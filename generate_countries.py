@@ -106,7 +106,7 @@ for country in dataset.itertuples():
       {
         "names": countrynames,
         "type": country.TYPE,
-        "path": output_dir / f"{country.NAME_EN}.png"
+        "path": (output_dir / f"{country.NAME_EN}.png").relative_to(Path.cwd())
       }
     )
 
