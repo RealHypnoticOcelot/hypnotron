@@ -31,10 +31,10 @@ class catposts(commands.Cog):
 
   @tasks.loop(time=datetime.time(hour=17, minute=00, tzinfo=datetime.timezone.utc)) # utc
   async def catpost(self):
-    print("Catpost Activated")
-    catposts_channel = self.bot.get_guild(
+    guild = await self.bot.fetch_guild(
       dotenv_values()['CATPOSTS_GUILD']
-    ).get_channel(
+    )
+    catposts_channel = await guild.fetch_channel(
       dotenv_values()['CATPOSTS_CHANNEL']
     )
     catpost = await get_cat()
